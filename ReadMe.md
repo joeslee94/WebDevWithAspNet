@@ -6,5 +6,6 @@ To access files:
 3. Navigate to file with the extension (.csproj).
 4. Press F5 once Visual Studios opens or press Debug.
 5. Use the application.
-6. Write me some feedback.  
-  Thanks for dropping by.
+6. Write me some feedback.
+
+Thanks for dropping by.
