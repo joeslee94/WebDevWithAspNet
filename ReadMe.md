@@ -7,4 +7,4 @@ To access files:
 4. Press F5 once Visual Studios opens or press Debug.
 5. Use the application.
 6. Write me some feedback.  
-Thanks for dropping by.
+  Thanks for dropping by.
