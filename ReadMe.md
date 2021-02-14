@@ -1,4 +1,5 @@
 ## My projects generated through ASP.NET
+### All projects are & were inspired through the instruction of Bob Tabor
 ### I will upload these projects as .zips, please use visual studios to view them after extracting them.  
 To access files:
 1. Extract file.
