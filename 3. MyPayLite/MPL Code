@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace CS_ASP_019C_Epic_Spies_Challenge
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            //Business rule number 1
+            if (!Page.IsPostBack)
+            {
+                endCalendar.VisibleDate = DateTime.Now;
+                endCalendar.SelectedDate = DateTime.Now;
+
+                newstartCalendar.VisibleDate = DateTime.Now.Date.AddDays(15);
+                newstartCalendar.SelectedDate = DateTime.Now.Date.AddDays(15);
+
+                newendCalendar.VisibleDate = DateTime.Now.Date.AddDays(22);
+                newendCalendar.SelectedDate = DateTime.Now.Date.AddDays(22);
+            }
+        }
+
+        protected void submitButton_Click(object sender, EventArgs e)
+        {
+            //for time off
+            //Can also use TimeSpan and SelectedDate.Subtract
+            DateTime newassignment = newstartCalendar.SelectedDate;
+            DateTime oldassignment = endCalendar.SelectedDate;
+            TimeSpan timeoff = newassignment - oldassignment;
+            double totaldaysoff = Math.Round(timeoff.TotalDays);
+
+            //for figuring out how much to pay
+            DateTime newendassignment = newendCalendar.SelectedDate;
+            TimeSpan paidtime = newendassignment - newassignment;
+            double totalpaidtime = Math.Round(paidtime.TotalDays);
+
+            if (totaldaysoff < 14)
+            {
+                resultLabel.Text = $"{totaldaysoff} days is not enough." +
+                    $"Please allow for at least 14 days off between assignments";
+            }
+            else if (totaldaysoff == 14)
+            {
+                resultLabel.Text = $"{totaldaysoff} days is one off from being enough." +
+                    $"Please choose a start date 1 day to the right.";
+            }
+            else if (totalpaidtime <= 21)
+            {
+                double undertwoonedays = totalpaidtime * 500;
+                resultLabel.Text = $"{codenameTextBox.Text}'s next assignment: " +
+                    $"{newassignmentTextBox.Text}, is going to cost {undertwoonedays:C} " +
+                    $"for {totalpaidtime} days of work.";
+            }
+            else if (totalpaidtime > 21)
+            {
+                //this is if for everyday over 21 days, the spy gets paid $1000/day
+                double thousanddollardays = totalpaidtime - 21;
+                double fivehundreddays = 21 * 500;
+                double overtwoonedays = thousanddollardays * 1000 + fivehundreddays;
+
+                resultLabel.Text = $"{codenameTextBox.Text}'s next assignment: " +
+                    $"{newassignmentTextBox.Text}, is going to cost {overtwoonedays:C} " +
+                    $"for {totalpaidtime} days of work.";
+            }
+        }
+    }
+}
