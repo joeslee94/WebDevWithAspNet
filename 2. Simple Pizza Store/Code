@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace CS_ASP_013C_First_Papa_Bobs_Pizza
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void orderButton_Click(object sender, EventArgs e)
+        {
+            //initial price
+            float totalprice = 0.00f;
+
+            //pizza prices
+            float babypizza = 10.00f;
+            float mamapizza = 13.00f;
+            float papapizza = 16.00f;
+
+            //crust
+            float regularcrust = 0.00f;
+            float deepdishcrust = 2.00f;
+
+            //toppings
+            float pepperoni = 1.50f;
+            float onions = 0.75f;
+            float gpeppers = 0.50f;
+            float rpeppers = 0.75f;
+            float anchovies = 2.00f;
+
+            //Size Selection
+            //while (!babyRadioButton.Checked && !mamaRadioButton.Checked && !papaRadioButton.Checked)
+            //{
+            //    totalpriceLabel.Text = "Make a size selection.";
+            //    break;
+            //}
+
+            if (babyRadioButton.Checked)
+                totalprice += babypizza;
+            else if (mamaRadioButton.Checked)
+                totalprice += mamapizza;
+            else if (papaRadioButton.Checked)
+                totalprice += papapizza;
+
+
+            //Crust Selection
+            //while (!regularRadioButton.Checked && !deepRadioButton.Checked)
+            //{
+            //    totalpriceLabel.Text = "Make a crust selection.";
+            //    break;
+            //}
+
+            if (regularRadioButton.Checked)
+                totalprice += regularcrust;
+            else if (deepRadioButton.Checked)
+                totalprice += deepdishcrust;
+
+            //Topping Selection
+            if (pepCheckBox.Checked)
+                totalprice += pepperoni;
+            if (onionCheckBox.Checked)
+                totalprice += onions;
+            if (gpeppersCheckBox.Checked)
+                totalprice += gpeppers;
+            if (rpeppersCheckBox.Checked)
+                totalprice += rpeppers;
+            if (anchoviesCheckBox.Checked)
+                totalprice += anchovies;
+
+            //CAN ALSO BE
+            //totalprice = (pepCheckBox.Checked) ? totalprice + pepperoni : totalprice;
+            //totalprice = (onionCheckBox.Checked) ? totalprice + onions : totalprice;
+            //totalprice = (gpeppersCheckBox.Checked) ? totalprice + gpeppers : totalprice;
+            //totalprice = (rpeppersCheckBox.Checked) ? totalprice + rpeppers : totalprice;
+            //totalprice = (anchoviesCheckBox.Checked) ? totalprice + anchovies : totalprice;
+
+            //Special Discount
+            if ((pepCheckBox.Checked &&
+                gpeppersCheckBox.Checked &&
+                anchoviesCheckBox.Checked) ||
+                (pepCheckBox.Checked &&
+                rpeppersCheckBox.Checked &&
+                onionCheckBox.Checked))
+            {
+                float discountOne = totalprice - 2.00f;
+                totalpriceLabel.Text = discountOne.ToString();
+                totalpriceLabel.Text = $"Your order is ${discountOne}";
+
+                //CAN ALSO write
+                //totalprice -= 2.00f;
+            }
+
+            //No Toppings Selected or When Toppings are Selected
+            totalpriceLabel.Text = $"Your order is ${totalprice}";
+        }
+    }
+}
