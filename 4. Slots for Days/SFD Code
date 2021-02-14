@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace CS_ASP_034MC_Casino
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        Random random = new Random();       
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!Page.IsPostBack)
+            {
+                slotImagestoMultiplier(0.0);
+                ViewState.Add("PlayersPot", 100);
+                displayRunningTotal();
+            }
+        }
+        protected void leverButton_Click(object sender, EventArgs e)
+        {
+            if (!Double.TryParse(betTextBox.Text, out double bet))
+                return;
+                        
+            double winnings = slotImagestoMultiplier(bet);
+            messageforWinning(bet, winnings);
+            calculateMoney(bet, winnings);
+            displayRunningTotal();
+        }
+
+        private void messageforWinning(double bet, double winnings)
+        {
+            if (winnings > 0)
+                winningsLabel.Text = $"Congratulations you bet {bet:C}, and won {winnings:C}.";
+            else
+                winningsLabel.Text = $"You only lost {bet:C}.";
+        }
+        private void calculateMoney(double bet, double winnings)
+        {
+            double PlayersMoney = double.Parse(ViewState["PlayersPot"].ToString());
+            PlayersMoney -= bet;
+            PlayersMoney += winnings;
+            ViewState["PlayersPot"] = PlayersMoney;
+        }
+        private double slotImagestoMultiplier(double bet)
+        {
+            string[] slotImages = new string[] { randomImageGenerator(), randomImageGenerator(), randomImageGenerator() };
+            slotOneImage.ImageUrl = $"/Images/{slotImages[0]}.png";
+            slotTwoImage.ImageUrl = $"/Images/{slotImages[1]}.png";
+            slotThreeImage.ImageUrl = $"/Images/{slotImages[2]}.png";
+            double betmultiplier = multiplier(slotImages);
+            return bet * betmultiplier;
+        }
+
+        private int multiplier(string[] slotImages)
+        {
+            if (slotImages[0] == "Bar" || slotImages[1] == "Bar" || slotImages[2] == "Bar") return 0;
+            if (slotImages[0] == "Seven" && slotImages[1] == "Seven" && slotImages[2] == "Seven") return 100;
+            else return cherryCounttoNumber(slotImages);
+        }
+
+        private int cherryCounttoNumber(string[] slotImages)
+        {
+            int numberofCherries = cherryCount(slotImages);
+            if (numberofCherries == 1) return 2;
+            if (numberofCherries == 1) return 3;
+            if (numberofCherries == 1) return 4;
+            else return 0;
+        }
+
+        private int cherryCount(string[] slotImages)
+        {
+            int cherryCount = 0;
+            if (slotImages[0] == "Cherry") cherryCount++;
+            if (slotImages[1] == "Cherry") cherryCount++;
+            if (slotImages[2] == "Cherry") cherryCount++;
+            return cherryCount;
+        }
+        
+        private string randomImageGenerator()
+        {
+            string[] images = new string[] { "Strawberry", "Bar", "Lemon", "Bell", "Clover", "Cherry", "Diamond", "Orange", "Seven", "HorseShoe", "Plum", "Watermelon" };
+            return images[random.Next(11)];
+        }
+        private void displayRunningTotal()
+        {
+            playersmoneyLabel.Text = $"{ViewState["PlayersPot"]:C}";
+        }
+
+    }
+}
