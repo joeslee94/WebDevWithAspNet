@@ -1,0 +1,126 @@
+//Default.aspx.cs
+using CS_ASP_045C_Darts_Library;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace CS_ASP_045C_Simple_Darts
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        Random random = new Random();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void playButton_Click(object sender, EventArgs e)
+        {
+            Dart playerOne = new Dart();
+            Dart playerTwo = new Dart();
+
+            while (playerOne.playerScore < 300 || playerTwo.playerScore < 300)
+            {
+                playerOne.RunningTotal(random);
+                playerTwo.RunningTotal(random);
+            }
+
+            Winner(playerOne.playerScore, playerTwo.playerScore);
+        }
+
+        protected void Winner(int playerOneScore, int playerTwoScore)
+        {
+            if (playerOneScore >=300 && playerOneScore > playerTwoScore)
+            {
+                resultLabel.Text = $"Player One's Score: {playerOneScore}.</br>" +
+                $"Player Two's Score {playerTwoScore}.</br>" +
+                $"Player One is the Winner!";
+            }
+            else if (playerTwoScore >= 300 && playerTwoScore > playerOneScore)
+            {
+                resultLabel.Text = $"Player One's Score: {playerOneScore}.</br>" +
+                $"Player Two's Score {playerTwoScore}.</br>" +
+                $"Player Two is the Winner!";
+            }
+        }
+    }
+}
+
+//Class Code for Darts
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CS_ASP_045C_Darts_Library
+{
+    public class Dart
+    {
+        Random dartPercent = new Random();
+        Random dartRings = new Random();
+        //1-20 is equal so 5% each to score 1 - 20
+        //5% on inner band = double outer band is triple so 5*5 0.0025 chance of bands?
+        
+        private int Score;
+
+        public int playerScore
+        {
+            get { return Score; }
+            set { Score = 0; }
+        }
+        public int RunningTotal(Random random)
+        {
+            Score += Throw(random);
+            return Score;
+        }
+
+        public int Throw(Random random)
+        {
+            //generate dartscore
+            int dartScore = random.Next(0, 20);
+
+            //BullsEye
+            BullsEye(dartScore);
+
+            //inner rings x2 or x3
+            ScoreDouble(dartScore, random);
+            ScoreTriple(dartScore, random);
+
+            return dartScore;
+        }
+
+        public int ScoreDouble(int dartScore, Random random)
+        {
+            //if dartRings true, dartscore double
+            double dartDoubleScore = random.NextDouble();
+
+            if (dartDoubleScore <= 0.05)
+                return dartScore * 2;
+            else
+                return dartScore;
+        }
+
+        public int ScoreTriple(int dartScore, Random random)
+        {
+            //if dartRings true, dartscore triple
+            double dartTripleScore = random.NextDouble();
+
+            if (dartTripleScore <= 0.05)
+                return dartScore * 3;
+            else
+                return dartScore;
+        }
+
+        public int BullsEye(int dartScore)
+        {
+            if (dartScore != 0)
+                return dartScore;
+            else
+                return dartScore = 50;
+        }
+    }
+}
