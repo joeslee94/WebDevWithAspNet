@@ -1,4 +1,4 @@
-## Simple Payment Calculator
+# Simple Payment Calculator
 This payment calculator ensures the following:  
 - Initialize the calendar controls.
 - End of the previous assignment date is set to today.
@@ -8,5 +8,11 @@ This payment calculator ensures the following:
 - Shows earliest available date on the calendar for new assignments.
 - Payment is $500 per day.
 - If the assignment is greater than three weeks (21 days), the payment per day goes to $1000.  
-
+  
+Overall concepts of the following were covered:
+- Calendar controls
+- Timespans
+- Ensuring correct ViewState
+- Calculations based on dates
+  
 Please use the application and give me feedback.
