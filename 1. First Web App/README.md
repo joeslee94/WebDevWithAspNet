@@ -1,6 +1,6 @@
 # First ASP.NET Web App
 My first Web Application that utilizes Web Forms and the ASP.NET framework.  
-Overall the concepts that were covered:
+Overall concepts of the following were covered:
 - Buttons on webforms
 - Labels
 - Textboxes
