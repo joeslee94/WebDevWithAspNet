@@ -16,6 +16,8 @@ namespace CS_ASP_051C_Student_Courses
 
         protected void assignmentButton1_Click(object sender, EventArgs e)
         {
+            resultLabel.Text = "";
+
             List<Courses> curriculum = new List<Courses>()
             {
                 new Courses
@@ -62,6 +64,8 @@ namespace CS_ASP_051C_Student_Courses
 
         protected void assignmentButton2_Click(object sender, EventArgs e)
         {
+            resultLabel.Text = "";
+
             Courses course1 = new Courses() { CourseID = 1, Name = "Physics 101", Students = new List<Student>()};
             Courses course2 = new Courses() { CourseID = 1, Name = "Chemistry 101", Students = new List<Student>()};
             Courses course3 = new Courses() { CourseID = 1, Name = "English 101", Students = new List<Student>()};
@@ -89,6 +93,8 @@ namespace CS_ASP_051C_Student_Courses
 
         protected void assignmentButton3_Click(object sender, EventArgs e)
         {
+            resultLabel.Text = "";
+
             List<Courses> finalcourse = new List<Courses>()
             {
                 new Courses()
