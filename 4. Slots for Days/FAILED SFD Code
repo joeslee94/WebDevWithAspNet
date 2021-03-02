@@ -1,0 +1,144 @@
+//tried to complete the challenge in a different way.
+//however I failed to complete the challenge correctly.
+//will attempt it again to make sure that it works
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace CS_ASP_034MC_Casino_Slots_v2
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!Page.IsPostBack)
+            {
+                ViewState.Add("PlayersPot", 100);
+                randomReelImagestoMultiplier();
+            }
+        }
+
+        protected void leverButton_Click(object sender, EventArgs e)
+        {
+            int multiplier = randomReelImagestoMultiplier();
+            if (int.TryParse(betTextBox.Text, out int bet))
+                return;
+
+            int winnings = bet * multiplier;
+
+            randomReelImagestoMultiplier();
+            potTotal(bet);
+            winOrLose(bet, winnings);
+        }
+        //Displaying how much the player won
+        private void winOrLose(int bet, int winnings)
+        {
+            if (winnings == 0)
+                winloseLabel.Text = $"Try your luck again!";
+            if (winnings > 0)
+                winloseLabel.Text = $"Congratulations, you bet {bet:C} you won {winnings:C}!";
+        }
+
+        //Updating the Running Total
+        private void potTotal(int bet)
+        {
+            ViewState["PlayersPot"] = playersPot(bet);
+            potLabel.Text = $"{ViewState["PlayersPot"]:C}";
+        }
+
+        //Calculating winnings with multiplier
+        private int playersPot(int bet)
+        {
+            int playersPot = int.Parse(ViewState["PlayersPot"].ToString());
+            playersPot += bet * randomReelImagestoMultiplier() - bet;
+            return playersPot;
+        }
+
+        //Logic for 7's, Cherries, and Bar to multiplier
+        private int multiplier(string[] randomImageArr)
+        {
+            int multiplier;
+            int cherryBarCount = cherriesBarCount(randomImageArr);
+            
+            if (tripleSeven(randomImageArr) != 0)
+            {
+                multiplier = tripleSeven(randomImageArr);
+            }
+            else
+            {
+                switch (cherryBarCount)
+                {
+                    case 0:
+                        multiplier = 0;
+                        break;
+                    case 1:
+                        multiplier = 2;
+                        break;
+                    case 2:
+                        multiplier = 3;
+                        break;
+                    case 3:
+                        multiplier = 4;
+                        break;
+                    default:
+                        multiplier = 0;
+                        break;
+                }
+            }
+            
+            return multiplier;
+        }
+        private int tripleSeven(string[] randomImageArr)
+        {
+            if (randomImageArr[0] == "Seven" && randomImageArr[1] == "Seven" && randomImageArr[2] == "Seven")
+                return 100;
+            else
+                return 0;
+        }
+        private int cherriesBarCount(string[] randomImageArr)
+        {
+            int numOfCherriesorBar = 0;
+
+            if(randomImageArr.Contains("Bar"))
+            {
+                numOfCherriesorBar = 0;
+            }
+            else
+            {
+                foreach (var imgName in randomImageArr)
+                {
+                    if(imgName == "Cherry")
+                        numOfCherriesorBar++;
+                }
+            }
+            
+            return numOfCherriesorBar;
+        }
+
+        //Generating random images and setting the view returns multiplier as well**
+        private int randomReelImagestoMultiplier()
+        {
+            string[] randomImageArr = { randomSingleImage(), randomSingleImage(), randomSingleImage() };
+            setImagestoReel(randomImageArr);
+            return multiplier(randomImageArr);
+        }
+        private void setImagestoReel(string[] randomImageArr)
+        {
+            reelImage1.ImageUrl = $"/Images/{randomImageArr[0]}.png";
+            reelImage2.ImageUrl = $"/Images/{randomImageArr[1]}.png";
+            reelImage3.ImageUrl = $"/Images/{randomImageArr[2]}.png";
+        }
+        Random randimg = new Random();
+        private string randomSingleImage()
+        {
+            string[] imgNames = { "Bar", "Bell", "Cherry", "Clover", "Diamond", "HorseShoe", "Lemon", "Orange", "Plum", "Seven", "Strawberry", "Watermelon" };
+            int randidx = randimg.Next(0, 12);
+            return imgNames[randidx];
+        }
+
+
+    }
+}
